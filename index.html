@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Josh</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #262626;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #404040;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d4d4d4;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a3a3a3;
+        }
+
+        /* Subtle grid background pattern */
+        .bg-grid-pattern-dark {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+        .bg-grid-pattern-light {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+        }
+
+        /* Fade in animations on scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Monochrome image filter */
+        .mono-img {
+            filter: grayscale(100%) contrast(115%);
+            transition: filter 0.5s ease, transform 0.5s ease;
+        }
+        .mono-img:hover {
+            filter: grayscale(20%) contrast(105%);
+            transform: scale(1.03);
+        }
+
+        .project-card.hidden-card {
+            display: none;
+        }
+
+        .header-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="bg-white text-neutral-900 dark:bg-[#0a0a0a] dark:text-neutral-100 font-sans antialiased selection:bg-neutral-900 selection:text-white dark:selection:bg-white dark:selection:text-black transition-colors duration-300">
+
+    <!-- Navigation Header -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/80 dark:bg-[#0a0a0a]/80 border-b border-neutral-200 dark:border-neutral-800/80 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Brand -->
+            <a href="#about" class="text-2xl font-black tracking-tight uppercase flex items-center gap-1 group">
+                <span class="text-black dark:text-white tracking-tighter hover:opacity-80 transition-opacity font-mono">Josh</span>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 font-mono text-xs uppercase tracking-widest">
+                <a href="#about" class="text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors">/ About</a>
+                <a href="#projects" class="text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors">/ Projects</a>
+                <a href="#contact" class="text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors">/ Contact</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="flex items-center justify-end gap-4 flex-shrink-0">
+                <a href="./Josh.pdf" download="Josh.pdf" class="header-action hidden sm:inline-flex items-center gap-2 px-4 py-2 border border-neutral-300 dark:border-neutral-700 hover:border-black dark:hover:border-white text-xs font-mono tracking-wider rounded-lg transition-all duration-300 hover:bg-neutral-900 hover:text-white dark:hover:bg-white dark:hover:text-black">
+                    <i class="fa-solid fa-file-pdf text-xs"></i>
+                    <span>Download CV / Resume</span>
+                </a>
+
+                <!-- Theme Toggle -->
+                <button id="themeToggle" aria-label="Toggle Theme" class="header-action w-10 h-10 rounded-lg border border-neutral-300 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
+                    <i class="fa-solid fa-moon block text-neutral-800 dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden text-neutral-200 dark:block"></i>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" aria-label="Toggle Mobile Menu" class="header-action md:hidden w-10 h-10 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#0a0a0a] px-6 py-6 transition-all">
+            <nav class="flex flex-col gap-4 font-mono text-sm uppercase tracking-wider">
+                <a href="#about" class="mobile-nav-link py-2 text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white">/ About</a>
+                <a href="#projects" class="mobile-nav-link py-2 text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white">/ Projects</a>
+                <a href="#contact" class="mobile-nav-link py-2 text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white">/ Contact</a>
+                <a href="./Josh.pdf" download="Josh.pdf" class="mobile-nav-link block w-full mt-2 py-3 border border-neutral-300 dark:border-neutral-700 text-center text-xs font-mono tracking-wider rounded-lg">
+                    <i class="fa-solid fa-file-pdf mr-2"></i> Download CV / Resume
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="pt-28 pb-20 px-6 max-w-7xl mx-auto space-y-24">
+
+        <!-- HERO / ABOUT SECTION -->
+        <section id="about" class="min-h-[75vh] flex flex-col justify-center pt-8 reveal active">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-4 items-start">
+                
+                <!-- LEFT COLUMN: Profile Avatar & Name Display -->
+                <div class="lg:col-span-4 flex flex-col items-start space-y-3">
+                    <div class="relative group w-full flex justify-center lg:justify-start">
+                        <div class="w-full max-w-md aspect-[4/3] lg:aspect-square lg:w-[22rem] lg:h-[22rem] lg:max-w-none rounded-xl overflow-hidden border-2 border-neutral-300 dark:border-neutral-800 shadow-2xl relative bg-neutral-100 dark:bg-neutral-900">
+                            <!-- User Avatar Image Placeholder -->
+                            <img id="userAvatar" src="./images/me.jpg" alt="Joshua Ocañada Profile Picture" class="w-full h-full object-cover mono-img">
+                        </div>
+                    </div>
+
+                    <div class="-mt-1">
+                        <h1 class="text-5xl sm:text-6xl font-black tracking-tight uppercase font-mono text-black dark:text-white leading-none">
+                            Joshua
+                        </h1>
+                        <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight uppercase font-mono text-neutral-600 dark:text-neutral-300 leading-none mt-1">
+                            Ocañada
+                        </h2>
+                        <p class="mt-3 font-mono text-[10px] sm:text-xs uppercase tracking-[0.22em] text-neutral-500 dark:text-neutral-400">
+                            Developer & Student Leader
+                        </p>
+                    </div>
+
+                    <!-- Quick Contact Links -->
+                    <div class="flex items-center gap-3 pt-2">
+                        <a href="#contact" class="px-5 py-2.5 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-semibold uppercase tracking-wider rounded-lg hover:opacity-90 transition-opacity">
+                            Get in Touch
+                        </a>
+                        <a href="https://github.com/redismynamelol" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-lg border border-neutral-300 dark:border-neutral-800 flex items-center justify-center hover:border-black dark:hover:border-white transition-colors" aria-label="GitHub">
+                            <i class="fa-brands fa-github text-sm"></i>
+                        </a>
+                        <a href="https://www.facebook.com/bogok13" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-lg border border-neutral-300 dark:border-neutral-800 flex items-center justify-center hover:border-black dark:hover:border-white transition-colors" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook-f text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: Framed About & Core Stack Card -->
+                <div class="lg:col-span-8 border border-neutral-300 dark:border-neutral-800 rounded-2xl p-6 sm:p-10 bg-neutral-50/50 dark:bg-neutral-900/30 backdrop-blur-sm shadow-sm space-y-8">
+                    
+                    <!-- ABOUT HEADER & BIO -->
+                    <div>
+                        <span class="font-mono text-xs uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-4">
+                            ABOUT
+                        </span>
+                        
+                        <div class="space-y-4 text-neutral-700 dark:text-neutral-300 text-base sm:text-lg leading-relaxed text-justify">
+                            <p>
+                                 I’m a passionate frontend developer, game development enthusiast, and student leader who enjoys creating visually engaging interfaces and interactive gaming experiences. I'm driven by creativity, collaboration, and problem-solving, with a focus on turning ideas into practical digital solutions through thoughtful design and development.
+                            </p>
+                            <p>
+                                I’m continuously improving my skills in frontend development and game development through hands-on projects, daily practice, and experimentation. I'm committed to building polished, user-friendly interfaces and immersive gameplay experiences while continuously growing as a developer and student leader.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-neutral-200 dark:border-neutral-800/80 pt-6"></div>
+
+                    <!-- CORE STACK SUBSECTION -->
+                    <div>
+                        <span class="font-mono text-xs uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-4">
+                            STACK
+                        </span>
+                        
+                        <div class="flex flex-wrap gap-2.5">
+                            <span class="px-3.5 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-700 font-mono text-xs font-medium bg-white dark:bg-neutral-800/60 text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                                <i class="fa-brands fa-html5"></i> HTML
+                            </span>
+                            <span class="px-3.5 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-700 font-mono text-xs font-medium bg-white dark:bg-neutral-800/60 text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                                <i class="fa-brands fa-css3-alt"></i> CSS
+                            </span>
+                            <span class="px-3.5 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-700 font-mono text-xs font-medium bg-white dark:bg-neutral-800/60 text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                                <i class="fa-brands fa-js"></i> JavaScript
+                            </span>
+                            <span class="px-3.5 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-700 font-mono text-xs font-medium bg-white dark:bg-neutral-800/60 text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                                <i class="fa-brands fa-react"></i> React JS
+                            </span>
+                            <span class="px-3.5 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-700 font-mono text-xs font-medium bg-white dark:bg-neutral-800/60 text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                                <i class="fa-solid fa-wind"></i> Tailwind CSS
+                            </span>
+                            <span class="px-3.5 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-700 font-mono text-xs font-medium bg-white dark:bg-neutral-800/60 text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                                <i class="fa-solid fa-code"></i> TypeScript
+                            </span>
+                            <span class="px-3.5 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-700 font-mono text-xs font-medium bg-white dark:bg-neutral-800/60 text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                                <i class="fa-solid fa-gamepad"></i> GDScript
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION (Clean cards WITHOUT language/technology badges) -->
+        <section id="projects" class="py-12 border-t border-neutral-200 dark:border-neutral-800/80 reveal">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+                <div>
+                    <span class="font-mono text-xs uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-2">
+                        // 02. FEATURED WORKS
+                    </span>
+                    <h3 class="text-3xl font-extrabold tracking-tight font-mono uppercase text-black dark:text-white">
+                        Featured Projects
+                    </h3>
+                </div>
+
+                <!-- Category Filter -->
+                <div class="flex items-center gap-2 font-mono text-xs overflow-x-auto pb-2 md:pb-0">
+                    <button onclick="filterProjects('all')" class="filter-btn active px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-black text-white dark:bg-white dark:text-black transition-all">
+                        All
+                    </button>
+                    <button onclick="filterProjects('web')" class="filter-btn px-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 hover:border-black dark:hover:border-white transition-all">
+                        Web Applications
+                    </button>
+                    <button onclick="filterProjects('game')" class="filter-btn px-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 hover:border-black dark:hover:border-white transition-all">
+                        Game Development
+                    </button>
+                    <button onclick="filterProjects('mobile')" class="filter-btn px-4 py-2 rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 hover:border-black dark:hover:border-white transition-all">
+                        Mobile Applications
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Project Item 1 -->
+                <div class="project-card order-3 group rounded-xl border border-neutral-200 dark:border-neutral-800/80 bg-neutral-50/30 dark:bg-neutral-900/20 overflow-hidden flex flex-col justify-between hover:border-black dark:hover:border-white transition-all duration-300" data-category="game" data-preview-video="./adventure.mp4">
+                    <div class="p-6 flex flex-col flex-1">
+                        <div class="aspect-video rounded-lg overflow-hidden mb-6 bg-neutral-200 dark:bg-neutral-800 relative">
+                            <img src="images/adventurer.png" alt="Atmospheric 3D Horror Game" class="w-full h-full object-cover">
+                            <div class="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-yellow-300 text-black font-mono text-[10px] font-bold uppercase tracking-[0.2em] shadow-md">
+                                In Progress
+                            </div>
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                                <button onclick="openModal(this)" class="p-3 bg-white text-black rounded-full hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-expand text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h4 class="text-xl font-bold font-mono tracking-tight uppercase mb-2 text-black dark:text-white group-hover:underline">
+                            The Adventurer
+                        </h4>
+                        <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed mb-4 text-justify">
+                            An action-adventure platformer where players explore four handcrafted maps, defeat challenging bosses, and overcome obstacles through fast movement and skill-based progression.
+                        </p>
+                        <div class="mt-auto h-24 border-t border-neutral-200/60 dark:border-neutral-800/60 pt-3">
+                            <p class="font-mono text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">Contribution:</p>
+                            <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">My contribution was designing and building the maps and developing the game logic.</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-2 border-t border-neutral-200/60 dark:border-neutral-800/40 flex items-center justify-between">
+                        <span class="font-mono text-xs text-neutral-400 uppercase">Game Project</span>
+                    </div>
+                </div>
+
+                <!-- Project Item 2 -->
+                <div class="project-card order-1 group rounded-xl border border-neutral-200 dark:border-neutral-800/80 bg-neutral-50/30 dark:bg-neutral-900/20 overflow-hidden flex flex-col justify-between hover:border-black dark:hover:border-white transition-all duration-300" data-category="web" data-source-code="https://github.com/redismynamelol/voidbook">
+                    <div class="p-6 flex flex-col flex-1">
+                        <div class="aspect-video rounded-lg overflow-hidden mb-6 bg-neutral-200 dark:bg-neutral-800 relative">
+                            <img src="images/voidbook.png" alt="Full-Stack Dashboard App" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                                <button onclick="openModal(this)" class="p-3 bg-white text-black rounded-full hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-expand text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h4 class="text-xl font-bold font-mono tracking-tight uppercase mb-2 text-black dark:text-white group-hover:underline">
+                            Void Book
+                        </h4>
+                        <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed mb-4 text-justify">
+                            Void Book is a dark-themed e-novel platform where readers can discover and enjoy freely published, copyright-free novels across various genres, featuring trending titles, editor’s picks, rankings, and the latest updates.
+                        </p>
+                        <div class="mt-auto h-24 border-t border-neutral-200/60 dark:border-neutral-800/60 pt-3">
+                            <p class="font-mono text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">Contribution:</p>
+                            <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">My contribution was developing the frontend and creating a user-friendly interface.</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-2 border-t border-neutral-200/60 dark:border-neutral-800/40 flex items-center justify-between">
+                        <span class="font-mono text-xs text-neutral-400 uppercase">Web App</span>
+                        <a href="https://voidbook.vercel.app/" target="_blank" rel="noopener noreferrer" class="font-mono text-xs font-semibold uppercase flex items-center gap-1 hover:underline">
+                            Visit <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Project Item 4 -->
+                <div class="project-card order-2 group rounded-xl border border-neutral-200 dark:border-neutral-800/80 bg-neutral-50/30 dark:bg-neutral-900/20 overflow-hidden flex flex-col justify-between hover:border-black dark:hover:border-white transition-all duration-300" data-category="mobile">
+                    <div class="p-6 flex flex-col flex-1">
+                        <div class="aspect-video rounded-lg overflow-hidden mb-6 bg-neutral-200 dark:bg-neutral-800 relative">
+                            <img src="images/Tseki.jpg" alt="Tseki mobile application preview" class="w-full h-full object-cover">
+                            <div class="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-yellow-300 text-black font-mono text-[10px] font-bold uppercase tracking-[0.2em] shadow-md">
+                                Beta
+                            </div>
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                                <button onclick="openModal(this)" aria-label="Preview Tseki" class="p-3 bg-white text-black rounded-full hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-expand text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h4 class="text-xl font-bold font-mono tracking-tight uppercase mb-2 text-black dark:text-white group-hover:underline">
+                            Tseki
+                        </h4>
+                        <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed mb-4 text-justify">
+                            Tseki is an artificial intelligence-powered mobile application designed to help teachers generate assessments, grade student answer sheets using optical character recognition, and monitor academic performance through an integrated and user-friendly platform.
+                        </p>
+                        <div class="mt-auto h-24 border-t border-neutral-200/60 dark:border-neutral-800/60 pt-3">
+                            <p class="font-mono text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">Contribution:</p>
+                            <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">My contribution was designing and developing the frontend UI.</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-2 border-t border-neutral-200/60 dark:border-neutral-800/40 flex items-center justify-between">
+                        <span class="font-mono text-xs text-neutral-400 uppercase">Mobile App</span>
+                        <a href="https://expo.dev/accounts/johnarielramos/projects/TSEKI/builds/e1ee34ee-c2b8-4ac8-877f-80db25aa40ad" target="_blank" rel="noopener noreferrer" class="font-mono text-xs font-semibold uppercase flex items-center gap-1 hover:underline">
+                            Download APK <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="py-12 border-t border-neutral-200 dark:border-neutral-800/80 reveal">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-10">
+                    <span class="font-mono text-xs uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-2">
+                        // 03. GET IN TOUCH
+                    </span>
+                    <h3 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-mono uppercase text-black dark:text-white mb-3">
+                        Let's Build Something Together
+                    </h3>
+                    <p class="text-neutral-600 dark:text-neutral-400 text-sm sm:text-base">
+                        Have a project in mind, an opportunity to share, or just want to connect? Send a message below.
+                    </p>
+                </div>
+
+                <form id="contactForm" onsubmit="submitContactForm(event)" action="https://api.web3forms.com/submit" method="POST" class="space-y-6">
+                    <input type="hidden" name="access_key" value="3325d119-70e6-49da-af9e-5951c66cc36e">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label for="name" class="block font-mono text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400">Your Name</label>
+                            <input type="text" name="name" id="name" required placeholder="John Doe" class="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-800 bg-transparent text-black dark:text-white focus:outline-none focus:border-black dark:focus:border-white transition-colors font-sans">
+                        </div>
+                        <div class="space-y-2">
+                            <label for="email" class="block font-mono text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400">Email Address</label>
+                            <input type="email" name="email" id="email" required placeholder="john@example.com" class="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-800 bg-transparent text-black dark:text-white focus:outline-none focus:border-black dark:focus:border-white transition-colors font-sans">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="subject" class="block font-mono text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400">Subject</label>
+                        <input type="text" name="project" id="subject" required placeholder="Project Collaboration / Leadership Inquiry" class="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-800 bg-transparent text-black dark:text-white focus:outline-none focus:border-black dark:focus:border-white transition-colors font-sans">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="message" class="block font-mono text-xs uppercase tracking-wider text-neutral-600 dark:text-neutral-400">Message</label>
+                        <textarea id="message" name="message" rows="5" required placeholder="Hello Josh, I'd like to discuss..." class="w-full px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-800 bg-transparent text-black dark:text-white focus:outline-none focus:border-black dark:focus:border-white transition-colors font-sans resize-none"></textarea>
+                    </div>
+
+                    <button id="submitBtn" type="submit" class="w-full py-4 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-widest rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+                        <span>Send Message</span>
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
+                </form>
+
+                <!-- Status Feedback Toast Container -->
+                <div id="formFeedback" class="hidden mt-4 p-4 rounded-lg font-mono text-xs text-center"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-neutral-200 dark:border-neutral-800 py-10 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 font-mono text-xs text-neutral-500">
+            <div>
+                &copy; <span id="year"></span> Joshua Ocañada. All rights reserved.
+            </div>
+            <div class="flex items-center gap-6 uppercase tracking-wider">
+                <a href="#about" class="hover:text-black dark:hover:text-white transition-colors">Top</a>
+                <a href="https://github.com/redismynamelol" target="_blank" rel="noopener noreferrer" class="hover:text-black dark:hover:text-white transition-colors">GitHub</a>
+                <a href="https://www.facebook.com/bogok13" target="_blank" rel="noopener noreferrer" class="hover:text-black dark:hover:text-white transition-colors">Facebook</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- PROJECT DETAIL MODAL -->
+    <div id="projectModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="bg-white dark:bg-[#121212] border border-neutral-300 dark:border-neutral-800 rounded-2xl max-w-2xl w-full p-6 sm:p-8 space-y-4 shadow-2xl relative">
+            <button onclick="closeModal()" class="absolute top-6 right-6 w-8 h-8 rounded-full border border-neutral-300 dark:border-neutral-800 flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 id="modalTitle" class="text-2xl font-mono font-bold tracking-tight uppercase text-black dark:text-white"></h3>
+            <div class="overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-800">
+                <img id="modalImage" src="" alt="" class="w-full max-h-[60vh] object-contain transition-transform duration-500 ease-out hover:scale-110">
+                <video id="modalVideo" class="hidden w-full max-h-[60vh] object-contain" autoplay loop muted playsinline></video>
+            </div>
+            <p id="modalDescription" class="text-neutral-600 dark:text-neutral-300 text-sm leading-relaxed text-justify"></p>
+            <div class="pt-4 flex items-center justify-between gap-3">
+                <a id="modalSourceCode" href="#" target="_blank" rel="noopener noreferrer" class="hidden px-5 py-2.5 border border-neutral-300 dark:border-neutral-700 font-mono text-xs font-bold uppercase tracking-wider rounded-lg items-center gap-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors">
+                    <i class="fa-brands fa-github" aria-hidden="true"></i>
+                    Source Code
+                </a>
+                <button onclick="closeModal()" class="ml-auto px-5 py-2.5 bg-black text-white dark:bg-white dark:text-black font-mono text-xs font-bold uppercase tracking-wider rounded-lg">
+                    Close Preview
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Dynamic Copyright Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Theme Toggle Functionality
+        const themeToggleBtn = document.getElementById('themeToggle');
+
+        function syncThemeButton() {
+            const isDark = document.documentElement.classList.contains('dark');
+            themeToggleBtn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            syncThemeButton();
+        });
+
+        syncThemeButton();
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        // Scroll Reveal Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Filterable Projects
+        function filterProjects(category) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-black', 'text-white', 'dark:bg-white', 'dark:text-black');
+                btn.classList.add('text-neutral-600', 'dark:text-neutral-400');
+            });
+
+            event.currentTarget.classList.add('bg-black', 'text-white', 'dark:bg-white', 'dark:text-black');
+            event.currentTarget.classList.remove('text-neutral-600', 'dark:text-neutral-400');
+
+            const cards = document.querySelectorAll('.project-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.classList.remove('hidden-card');
+                } else {
+                    card.classList.add('hidden-card');
+                }
+            });
+        }
+
+        // Project Modal Handling
+        function openModal(previewButton) {
+            const projectCard = previewButton.closest('.project-card');
+            document.getElementById('modalTitle').textContent = projectCard.querySelector('h4').textContent.trim();
+            document.getElementById('modalDescription').textContent = projectCard.querySelector('p').textContent.trim();
+            const sourceCodeLink = document.getElementById('modalSourceCode');
+            const sourceCodeUrl = projectCard.dataset.sourceCode;
+            sourceCodeLink.href = sourceCodeUrl || '#';
+            sourceCodeLink.classList.toggle('hidden', !sourceCodeUrl);
+            sourceCodeLink.classList.toggle('inline-flex', Boolean(sourceCodeUrl));
+            const projectImage = projectCard.querySelector('img');
+            const modalImage = document.getElementById('modalImage');
+            const modalVideo = document.getElementById('modalVideo');
+            const previewVideo = projectCard.dataset.previewVideo;
+            if (previewVideo) {
+                modalImage.classList.add('hidden');
+                modalVideo.src = previewVideo;
+                modalVideo.classList.remove('hidden');
+            } else {
+                modalVideo.pause();
+                modalVideo.removeAttribute('src');
+                modalVideo.load();
+                modalVideo.classList.add('hidden');
+                modalImage.src = projectImage.src;
+                modalImage.alt = projectImage.alt;
+                modalImage.classList.remove('hidden');
+            }
+            const modal = document.getElementById('projectModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            if (previewVideo) {
+                document.getElementById('modalVideo').play().catch(error => {
+                    console.error('Unable to autoplay project preview video:', error);
+                });
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('projectModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            const modalVideo = document.getElementById('modalVideo');
+            modalVideo.pause();
+            modalVideo.currentTime = 0;
+        }
+
+       async function submitContactForm(event) {
+    event.preventDefault(); // Stops the page from redirecting
+    
+    const form = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnSpan = submitBtn.querySelector('span');
+    
+    // Change button text to show loading state
+    const originalText = btnSpan.textContent;
+    btnSpan.textContent = 'Sending...';
+    submitBtn.disabled = true;
+
+    const formData = new FormData(form);
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
+
+    try {
+        const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: json
+        });
+
+        const result = await response.json();
+        
+        if (response.status === 200) {
+            // Popup message when successfully sent
+            alert('Your message has been sent!');
+            form.reset(); // Clears the form inputs
+        } else {
+            alert(result.message || 'Something went wrong. Please try again.');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Network error. Please check your internet connection.');
+    } finally {
+        // Restore button state
+        btnSpan.textContent = originalText;
+        submitBtn.disabled = false;
+    }
+}
+    </script>
+</body>
+</html>
