@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth dark">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -77,16 +77,6 @@
             transform: translateY(0);
         }
 
-        /* Monochrome image filter */
-        .mono-img {
-            filter: grayscale(100%) contrast(115%);
-            transition: filter 0.5s ease, transform 0.5s ease;
-        }
-        .mono-img:hover {
-            filter: grayscale(20%) contrast(105%);
-            transform: scale(1.03);
-        }
-
         .project-card.hidden-card {
             display: none;
         }
@@ -161,7 +151,7 @@
                     <div class="relative group w-full flex justify-center lg:justify-start">
                         <div class="w-full max-w-md aspect-[4/3] lg:aspect-square lg:w-[22rem] lg:h-[22rem] lg:max-w-none rounded-xl overflow-hidden border-2 border-neutral-300 dark:border-neutral-800 shadow-2xl relative bg-neutral-100 dark:bg-neutral-900">
                             <!-- User Avatar Image Placeholder -->
-                            <img id="userAvatar" src="./images/me.jpg" alt="Joshua Ocañada Profile Picture" class="w-full h-full object-cover mono-img">
+                            <img id="userAvatar" src="./images/me.jpg" alt="Joshua Ocañada Profile Picture" class="w-full h-full object-cover">
                         </div>
                     </div>
 
@@ -301,7 +291,7 @@
                         </p>
                         <div class="mt-auto h-24 border-t border-neutral-200/60 dark:border-neutral-800/60 pt-3">
                             <p class="font-mono text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">Contribution:</p>
-                            <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">My contribution was designing and building the maps and developing the game logic.</p>
+                            <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">Developed the game logic and implemented core mechanics. I also designed and built the maps.</p>
                         </div>
                     </div>
                     <div class="px-6 pb-6 pt-2 border-t border-neutral-200/60 dark:border-neutral-800/40 flex items-center justify-between">
@@ -328,7 +318,7 @@
                         </p>
                         <div class="mt-auto h-24 border-t border-neutral-200/60 dark:border-neutral-800/60 pt-3">
                             <p class="font-mono text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">Contribution:</p>
-                            <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">My contribution was developing the frontend and creating a user-friendly interface.</p>
+                            <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">Developed the frontend and created a user-friendly interface.</p>
                         </div>
                     </div>
                     <div class="px-6 pb-6 pt-2 border-t border-neutral-200/60 dark:border-neutral-800/40 flex items-center justify-between">
@@ -361,7 +351,7 @@
                         </p>
                         <div class="mt-auto h-24 border-t border-neutral-200/60 dark:border-neutral-800/60 pt-3">
                             <p class="font-mono text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">Contribution:</p>
-                            <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">My contribution was designing and developing the frontend UI.</p>
+                            <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">Designed and developed the user interface.</p>
                         </div>
                     </div>
                     <div class="px-6 pb-6 pt-2 border-t border-neutral-200/60 dark:border-neutral-800/40 flex items-center justify-between">
